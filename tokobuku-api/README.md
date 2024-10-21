@@ -56,3 +56,10 @@ G. Delete untuk menghapus buku:
 ![Screenshoot tokobuku-api](images/deletebuku.png)
 
 Tugas:
+1.Tambahkan validasi:
+nama buku tidak boleh kosong
+harga minimal Rp 1.000
+
+2.Buatlah rancangan endpoint baru untuk mencari buku berdasarkan kategori atau judul:
+
+3.Uji api secara publik:

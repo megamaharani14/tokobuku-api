@@ -2,60 +2,45 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Buku;
+use Illuminate\Http\Request;
+
 class BukuController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        return Buku::all();
+        return Buku::with('kategori')->get();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'judul'=>'required',
-            'harga'=>'required|integer|min:1000'
+            'judul' => 'required',
+            'penulis' => 'required',
+            'harga' => 'required|numeric|min:0',
+            'stok' => 'required|integer|min:0',
+            'kategori_id' => 'required|exists:kategoris,id',
         ]);
-        
-        $Buku = Buku::create($request->all());
-        return response()->json($Buku, 201);
+
+        $buku = Buku::create($request->all());
+        return response()->json($buku, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show($id)
     {
-        $Buku = Buku::findOrFail($id);
-         return response()->json($Buku);
+        return Buku::with('kategori')->find($id);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'judul'=>'required',
-            'harga'=>'required|integer|min:1000'
-        ]);
         $buku = Buku::findOrFail($id);
         $buku->update($request->all());
         return response()->json($buku, 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        Buku::destroy($id);
+        return response()->json(null, 204);
     }
 }
