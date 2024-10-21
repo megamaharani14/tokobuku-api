@@ -7,4 +7,4 @@ use App\Http\Controllers\BukuController;
 
 Route::apiResource('kategoris', KategoriController::class);
 Route::apiResource('bukus', BukuController::class);
-// Route::apiResource('bukus/search', [BukuController::class, 'search']);
+Route::get('bukus/search', [BukuController::class, 'search']);
