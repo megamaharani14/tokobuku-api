@@ -15,9 +15,9 @@ class BukuController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'judul' => 'required',
+            'judul' => 'required|string|max:255',
             'penulis' => 'required',
-            'harga' => 'required|numeric|min:0',
+            'harga' => 'required|numeric|min:1000',
             'stok' => 'required|integer|min:0',
             'kategori_id' => 'required|exists:kategoris,id',
         ]);
@@ -42,5 +42,21 @@ class BukuController extends Controller
     {
         Buku::destroy($id);
         return response()->json(null, 204);
+    }
+
+    public function search(Request $request)
+    {
+        $query = Buku::query();
+
+        if ($request->has('judul')) {
+            $query->where('judul', 'suka', '%' . $request->judul . '%');
+        }
+        
+        if ($request->has('kategori_id')) {
+            $query->when('kategori_id', $request->kategori_id);
+        }
+        
+        $buku = $query->with('kategori')->get();
+        return response()->json($buku);
     }
 }
